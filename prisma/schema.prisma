@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Generator configuration for Prisma Client
+generator client {
+  provider = "prisma-client-js"
+  // Enable type safety for null checks
+  previewFeatures = ["fullTextSearch"]
+}
+
+// Database connection configuration
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Ensure high availability and read scalability
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+// SavedContract model represents a smart contract saved by users
+model SavedContract {
+  id           String    @id @default(uuid())
+  contractId   String    @unique
+  users        UserSavedContract[]
+  operations   ContractOperation[]
+  analytics    Analytics[]
+  alerts       Alert[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Index for faster queries on contractId
+  @@index([contractId])
+}
+
+// UserSavedContract model represents the relationship between users and their saved contracts
+model UserSavedContract {
+  userId     String
+  contractId String
+  nickname   String
+  isDefault  Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  contract   SavedContract @relation(fields: [contractId], references: [contractId], onDelete: Cascade)
+
+  @@id([userId, contractId])
+
+  // Index for faster queries on userId
+  @@index([userId])
+}
+
+// ContractOperation model represents individual operations performed on a contract
+model ContractOperation {
+  id              String   @id @default(uuid())
+  contract        SavedContract @relation(fields: [contractId], references: [contractId], onDelete: Cascade)
+  contractId      String
+  transactionHash String
+  operationType   String
+  function        String?
+  parameters      Json?
+  result          String?
+  errorCode       String?
+  resourceUsage   Int?
+  timestamp       DateTime
+  createdAt       DateTime @default(now())
+
+  @@index([contractId, timestamp])
+}
+
+// Analytics model stores aggregated data for contract analytics
+model Analytics {
+  id          String   @id @default(uuid())
+  contract    SavedContract @relation(fields: [contractId], references: [contractId], onDelete: Cascade)
+  contractId  String
+  timeRange   TimeRange
+  startTime   DateTime
+  endTime     DateTime
+  data        Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([contractId, timeRange, startTime, endTime])
+}
+
+// Alert model represents user-configured alerts for contract events
+model Alert {
+  id              String   @id @default(uuid())
+  contract        SavedContract @relation(fields: [contractId], references: [contractId], onDelete: Cascade)
+  contractId      String
+  type            AlertType
+  threshold       Float?
+  isActive        Boolean  @default(true)
+  lastTriggeredAt DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([contractId, type])
+}
+
+// TimeRange enum represents different time ranges for analytics
+enum TimeRange {
+  HOUR_1
+  HOUR_3
+  HOUR_6
+  HOUR_12
+  DAY_1
+  DAY_3
+  WEEK_1
+  WEEK_2
+  MONTH_1
+  MONTH_3
+  MONTH_6
+  YEAR_1
+  ALL_TIME
+}
+
+// AlertType enum represents different types of alerts
+enum AlertType {
+  ERROR_RATE_HIGH
+  TRANSACTION_VOLUME_SPIKE
+  RESOURCE_USAGE_HIGH
+  SPECIFIC_FUNCTION_CALL
+  CONTRACT_INACTIVE
+}
