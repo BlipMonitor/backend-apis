@@ -57,7 +57,7 @@ cp .env.example .env
 
 - **Backend**: Node.js with TypeScript and Express
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: Passport and Auth0 integration
+- **Authentication**: Clerk integration
 - **API Documentation**: Swagger
 - **Process Management**: PM2
 - **Containerization**: Docker support for easy deployment
@@ -131,7 +131,7 @@ Request data is validated using [Joi](https://joi.dev/). Check the `src/validati
 
 ## Authentication
 
-This project uses Auth0 for authentication. To require authentication for certain routes, use the `auth` middleware.
+This project uses Clerk for authentication. To require authentication for certain routes, use the `auth` middleware.
 
 ```typescript
 import express from 'express';
