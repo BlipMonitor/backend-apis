@@ -5,7 +5,7 @@ services:
     container_name: node-app-prod
     command: yarn start
     environment:
-      - PORT=${PORT}
+      - PORT=${PORT:-3000}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
       interval: 30s

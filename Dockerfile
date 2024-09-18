@@ -10,8 +10,11 @@ USER node
 
 RUN yarn install --pure-lockfile
 
+RUN yarn global add rimraf
+
 COPY --chown=node:node . .
 
+ENV PORT=3000
 EXPOSE ${PORT}
 
 CMD ["yarn", "start"]
