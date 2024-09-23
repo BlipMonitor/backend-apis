@@ -192,6 +192,6 @@ async function runAlertEmailScheduler(): Promise<void> {
 }
 
 // Schedule the job to run every hour at 30 minutes past the hour
-const alertEmailJob = cron.schedule('51 * * * *', runAlertEmailScheduler);
+const alertEmailJob = cron.schedule('30 * * * *', runAlertEmailScheduler);
 
 export default alertEmailJob;
