@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "repository": "https://github.com/BlipMonitor/backend-apis.git",
   "scripts": {
-    "start": "yarn build && node build/src/index.js",
+    "start": "yarn build && pm2 start ecosystem.config.json --no-daemon",
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "test": "docker-compose -f docker-compose.only-db-test.yml up -d && yarn db:push && jest -i --colors --verbose --detectOpenHandles && docker-compose -f docker-compose.only-db-test.yml down",
     "test:watch": "docker-compose -f docker-compose.only-db-test.yml up -d && yarn db:push && jest -i --watchAll && docker-compose -f docker-compose.only-db-test.yml down",
@@ -21,7 +21,7 @@
     "docker:dev-db:start": "docker-compose -f docker-compose.only-db-dev.yml up -d",
     "docker:dev-db:stop": "docker-compose -f docker-compose.only-db-dev.yml down",
     "prepare": "husky",
-    "build": "yarn rimraf build && tsc -p tsconfig.json"
+    "build": "rimraf build && tsc -p tsconfig.json"
   },
   "keywords": [
     "stellar",
@@ -72,7 +72,6 @@
     "nodemon": "^3.1.4",
     "prettier": "^3.3.3",
     "prisma": "^5.19.1",
-    "rimraf": "^6.0.1",
     "supertest": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
