@@ -35,9 +35,9 @@ const envVarsSchema = Joi.object()
     GOOGLE_CLOUD_PROJECT: Joi.string()
       .required()
       .description('the project ID of the Google Cloud project'),
-    GOOGLE_APPLICATION_CREDENTIALS: Joi.string()
+    GOOGLE_APPLICATION_CREDENTIALS_BASE64: Joi.string()
       .required()
-      .description('the path to the service account key JSON file')
+      .description('the base64 encoded service account key JSON file')
   })
   .unknown();
 
@@ -78,7 +78,7 @@ export default {
   },
   bigquery: {
     projectId: envVars.GOOGLE_CLOUD_PROJECT,
-    keyFilename: envVars.GOOGLE_APPLICATION_CREDENTIALS,
+    keyFilename: envVars.GOOGLE_APPLICATION_CREDENTIALS_BASE64,
     dataset: envVars.GOOGLE_BIGQUERY_DATASET,
     table: envVars.GOOGLE_BIGQUERY_TABLE
   }

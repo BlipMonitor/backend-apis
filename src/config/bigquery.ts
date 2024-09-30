@@ -3,7 +3,12 @@ import { BigQuery } from '@google-cloud/bigquery';
 import config from './config';
 import logger from './logger';
 
-// add bigquery to the NodeJS global type
+// Decode the Base64 credentials
+const credentials = JSON.parse(
+  Buffer.from(config.bigquery.keyFilename as string, 'base64').toString('utf-8')
+);
+
+// Add bigquery to the NodeJS global type
 interface CustomNodeJsGlobal extends Global {
   bigquery: BigQuery;
 }
@@ -11,7 +16,12 @@ interface CustomNodeJsGlobal extends Global {
 // Prevent multiple instances of BigQuery Client in development
 declare const global: CustomNodeJsGlobal;
 
-const bigquery = global.bigquery || new BigQuery();
+const bigquery =
+  global.bigquery ||
+  new BigQuery({
+    projectId: config.bigquery.projectId,
+    credentials: credentials
+  });
 
 if (config.env === 'development') global.bigquery = bigquery;
 
