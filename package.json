@@ -36,6 +36,9 @@
   ],
   "author": "Bhaven Kakade",
   "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.10.0",
