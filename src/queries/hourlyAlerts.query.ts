@@ -8,8 +8,11 @@ import bigquery from '../config/bigquery';
  * @returns A BigQuery SQL query string
  */
 const getHourlyContractAlertsQuery = (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   contractIds: string[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   startTime: Date,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   endTime: Date
 ): string => {
   return `
@@ -28,7 +31,7 @@ const getHourlyContractAlertsQuery = (
       GROUP BY
         contract_id, hour
       HAVING
-        COUNTIF(successful = FALSE) / COUNT(*) > 0.05
+        COUNTIF(successful = FALSE) / COUNT(*) > 0.01
     )
     SELECT
       contract_id,

@@ -9,6 +9,7 @@ import { DEFAULT_LIMIT } from '../config/constants';
  */
 const getRecentContractAlertsQuery = (
   contractIds: string[],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   limit: number = DEFAULT_LIMIT
 ): string => {
   return `
@@ -26,7 +27,7 @@ const getRecentContractAlertsQuery = (
       GROUP BY
         contract_id, hour
       HAVING
-        COUNTIF(successful = FALSE) / COUNT(*) > 0.05
+        COUNTIF(successful = FALSE) / COUNT(*) > 0.01
     )
     SELECT
       contract_id,
